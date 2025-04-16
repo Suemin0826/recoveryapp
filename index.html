@@ -1,177 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emotional Support App</title>
-  <style>
-    /* Inline CSS for App */
-    body {
-      font-family: 'Courier New', monospace;
-      background-color: #111;
-      color: #0ff;
-      margin: 0;
-      padding: 0;
-    }
-
-    .app {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    .app.alternate {
-      background-color: #fffbe7;
-      color: #005;
-    }
-
-    button {
-      background: none;
-      border: 2px solid currentColor;
-      color: inherit;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      margin: 0.5rem;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: rgba(255,255,255,0.1);
-    }
-
-    .recovery-mode {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: inherit;
-    }
-
-    .gif {
-      width: 128px;
-      height: 128px;
-      image-rendering: pixelated;
-      margin-bottom: 1rem;
-    }
-
-    .phrase {
-      font-size: 1.5rem;
-      margin: 1rem 0;
-    }
-
-    .timer {
-      font-size: 1.2rem;
-      opacity: 0.7;
-      color: #ff0;
-    }
-
-    .panic-history {
-      margin-top: 2rem;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-
-  <!-- React and ReactDOM CDN -->
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script>
-    const { useState, useEffect } = React;
-
-    const calmingPhrases = [
-      "Take a deep breath…",
-      "You’re doing great.",
-      "Let your thoughts float away…",
-      "You’re safe here.",
-      "Let the calm in.",
-      "Close your eyes for a moment…"
-    ];
-
-    const PanicHistory = ({ history }) => (
-      <div className="panic-history">
-        <h2>Panic History Log</h2>
-        <ul>
-          {history.map((entry, index) => (
-            <li key={index}>{entry}</li>
-          ))}
-        </ul>
-      </div>
-    );
-
-    const RecoveryMode = ({ phrase, timer }) => (
-      <div className="recovery-mode">
-        <img src="https://via.placeholder.com/128" alt="soothing gif" className="gif" />
-        <p className="phrase">{phrase}</p>
-        <p className="timer">⏳ {timer} seconds remaining</p>
-      </div>
-    );
-
-    const App = () => {
-      const [isRecoveryMode, setIsRecoveryMode] = useState(false);
-      const [phrase, setPhrase] = useState('');
-      const [history, setHistory] = useState([]);
-      const [theme, setTheme] = useState('default');
-      const [timer, setTimer] = useState(60);
-
-      useEffect(() => {
-        if (isRecoveryMode) {
-          const random = Math.floor(Math.random() * calmingPhrases.length);
-          setPhrase(calmingPhrases[random]);
-
-          const countdown = setInterval(() => {
-            setTimer((prev) => {
-              if (prev <= 1) {
-                clearInterval(countdown);
-                setIsRecoveryMode(false);
-              }
-              return prev - 1;
-            });
-          }, 1000);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Support App</title>
+    <style>
+        /* Inline CSS for App */
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #111;
+            color: #0ff;
+            margin: 0;
+            padding: 0;
         }
-      }, [isRecoveryMode]);
 
-      const startRecovery = () => {
-        setIsRecoveryMode(true);
-        setTimer(60);
-      };
+        .app {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
 
-      const logPanic = () => {
-        const now = new Date();
-        setHistory((prev) => [
-          ...prev,
-          `${now.toLocaleString()} Panic button pressed (Total: ${prev.length + 1})`
-        ]);
-        startRecovery();
-      };
+        .app.alternate {
+            background-color: #fffbe7;
+            color: #005;
+        }
 
-      const toggleTheme = () => {
-        const next = theme === 'default' ? 'alternate' : 'default';
-        setTheme(next);
-      };
+        button {
+            background: none;
+            border: 2px solid currentColor;
+            color: inherit;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            cursor: pointer;
+        }
 
-      return (
-        <div className={`app ${theme}`}>
-          {isRecoveryMode ? (
-            <RecoveryMode phrase={phrase} timer={timer} />
-          ) : (
-            <div className="home">
-              <h1>Welcome, Commander</h1>
-              <button onClick={startRecovery}>START RECOVERY</button>
-              <button onClick={logPanic}>PANIC BUTTON</button>
-              <button onClick={toggleTheme}>Switch Theme</button>
-              <PanicHistory history={history} />
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .recovery-mode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: inherit;
+        }
+
+        .gif {
+            width: 128px;
+            height: 128px;
+            image-rendering: pixelated;
+            margin-bottom: 1rem;
+        }
+
+        .phrase {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            opacity: 0.7;
+            color: #ff0;
+        }
+
+        .panic-history {
+            margin-top: 2rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <!-- React and ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script>
+        const { useState, useEffect } = React;
+
+        const calmingPhrases = [
+            "Take a deep breath…",
+            "You’re doing great.",
+            "Let your thoughts float away…",
+            "You’re safe here.",
+            "Let the calm in.",
+            "Close your eyes for a moment…"
+        ];
+
+        const PanicHistory = ({ history }) => (
+            <div className="panic-history">
+                <h2>Panic History Log</h2>
+                <ul>
+                    {history.map((entry, index) => (
+                        <li key={index}>{entry}</li>
+                    ))}
+                </ul>
             </div>
-          )}
-        </div>
-      );
-    };
+        );
 
-    ReactDOM.render(<App />, document.getElementById('root'));
-  </script>
+        const RecoveryMode = ({ phrase, timer }) => (
+            <div className="recovery-mode">
+                <img src="https://via.placeholder.com/128" alt="soothing gif" className="gif" />
+                <p className="phrase">{phrase}</p>
+                <p className="timer">⏳ {timer} seconds remaining</p>
+            </div>
+        );
+
+        const App = () => {
+            const [isRecoveryMode, setIsRecoveryMode] = useState(false);
+            const [phrase, setPhrase] = useState('');
+            const [history, setHistory] = useState([]);
+            const [theme, setTheme] = useState('default');
+            const [timer, setTimer] = useState(60);
+
+            useEffect(() => {
+                if (isRecoveryMode) {
+                    const random = Math.floor(Math.random() * calmingPhrases.length);
+                    setPhrase(calmingPhrases[random]);
+
+                    const countdown = setInterval(() => {
+                        setTimer((prev) => {
+                            if (prev <= 1) {
+                                clearInterval(countdown);
+                                setIsRecoveryMode(false);
+                            }
+                            return prev - 1;
+                        });
+                    }, 1000);
+                }
+            }, [isRecoveryMode]);
+
+            const startRecovery = () => {
+                setIsRecoveryMode(true);
+                setTimer(60);
+            };
+
+            const logPanic = () => {
+                const now = new Date();
+                setHistory((prev) => [
+                    ...prev,
+                    `${now.toLocaleString()} Panic button pressed (Total: ${prev.length + 1})`
+                ]);
+                startRecovery();
+            };
+
+            const toggleTheme = () => {
+                const next = theme === 'default' ? 'alternate' : 'default';
+                setTheme(next);
+            };
+
+            return (
+                <div className={`app ${theme}`}>
+                    {isRecoveryMode ? (
+                        <RecoveryMode phrase={phrase} timer={timer} />
+                    ) : (
+                        <div className="home">
+                            <h1>Welcome, Commander</h1>
+                            <button onClick={startRecovery}>START RECOVERY</button>
+                            <button onClick={logPanic}>PANIC BUTTON</button>
+                            <button onClick={toggleTheme}>Switch Theme</button>
+                            <PanicHistory history={history} />
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
 </body>
+
 </html>
